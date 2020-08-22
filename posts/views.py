@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import Post
 
 # Create your views here.
 def post_create(request):
@@ -25,8 +26,10 @@ def post_list(request):
     #        "title": "You need to login first",
     #        "user": request.user,
     #    }
+    queryset = Post.objects.all()
     context = {
         "title": "List",
+        "queryset": queryset,
     }
     return render(request, "index.html", context)
 
