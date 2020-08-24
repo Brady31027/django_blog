@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import Post
 from .forms import PostForm
 
@@ -9,12 +9,13 @@ def post_create(request):
     if form.is_valid():
         instance = form.save(commit = False)
         instance.save()
+        return HttpResponseRedirect(instance.get_url())
     
     context = {
         "title": "Create",
         "form": form
     }
-    return render(request, "create.html", context)
+    return render(request, "post_form.html", context)
 
 def post_detail(request, id=None):
     queryset = get_object_or_404(Post, id=id)
@@ -25,16 +26,6 @@ def post_detail(request, id=None):
     return render(request, "post_detail.html", context)
 
 def post_list(request):
-    #if request.user.is_authenticated:
-    #    context = {
-    #        "title": "List",
-    #        "user": request.user,
-    #    }
-    #else:
-    #    context = {
-    #        "title": "You need to login first",
-    #        "user": request.user,
-    #    }
     queryset = Post.objects.all()
     context = {
         "title": "List",
@@ -42,11 +33,19 @@ def post_list(request):
     }
     return render(request, "index.html", context)
 
-def post_update(request):
+def post_update(request, id=None):
+    instance = get_object_or_404(Post, id=id)
+    form = PostForm(request.POST or None, instance=instance)
+    if form.is_valid():
+        instance = form.save(commit = False)
+        instance.save()
+        return HttpResponseRedirect(instance.get_url())
     context = {
         "title": "Update",
+        "form": form,
+        "instance": instance,
     }
-    return render(request, "index.html", context)
+    return render(request, "post_form.html", context)
 
 def post_delete(request):
     context = {

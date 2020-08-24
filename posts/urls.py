@@ -20,7 +20,7 @@ urlpatterns = [
     path('', views.post_list),
     path('create', views.post_create),
     re_path(r'^(?P<id>\d+)/$', views.post_detail, name='detail'),
-    path('update', views.post_update),
+    re_path(r'^(?P<id>\d+)/edit/$', views.post_update, name='update'),
     path('delete', views.post_delete),
 ]
 
