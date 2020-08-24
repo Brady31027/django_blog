@@ -17,11 +17,11 @@ from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
-    path('', views.post_list),
+    path('', views.post_list, name='list'),
     path('create', views.post_create),
     re_path(r'^(?P<id>\d+)/$', views.post_detail, name='detail'),
     re_path(r'^(?P<id>\d+)/edit/$', views.post_update, name='update'),
-    path('delete', views.post_delete),
+    re_path(r'^(?P<id>\d+)/delete/$', views.post_delete),
 ]
 
 app_name = 'posts'
